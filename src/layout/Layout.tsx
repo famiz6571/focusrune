@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Outlet } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import Sidebar from "../components/Sidebar";
 import Footer from "../components/Footer";
@@ -6,7 +7,7 @@ import CommandPalette from "../components/CommandPalette";
 import { useTasks } from "../context/TaskContext";
 import { useKeyboardShortcuts } from "../hooks/useKeyboardShortcuts";
 
-export default function Layout({ children }: { children: React.ReactNode }) {
+export default function Layout() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [palette, setPalette] = useState(false);
   const { undo, redo } = useTasks();
@@ -28,7 +29,10 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         <div className="flex flex-col flex-1">
           <Navbar onToggleSidebar={() => setSidebarOpen(true)} />
 
-          <main className="flex-1 p-4 md:p-6">{children}</main>
+          <main className="flex-1 p-4 md:p-6">
+            {/* Outlet will render the matched child route */}
+            <Outlet />
+          </main>
 
           <Footer />
         </div>

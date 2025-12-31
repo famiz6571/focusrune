@@ -1,4 +1,5 @@
 import { LayoutDashboard, ListTodo, Tags, X } from "lucide-react";
+import { NavLink } from "react-router-dom";
 
 interface Props {
   open: boolean;
@@ -6,6 +7,16 @@ interface Props {
 }
 
 export default function Sidebar({ open, onClose }: Props) {
+  const menuItems = [
+    {
+      icon: <LayoutDashboard size={16} />,
+      label: "Dashboard",
+      to: "/dashboard",
+    },
+    { icon: <ListTodo size={16} />, label: "Tasks", to: "/tasks" },
+    { icon: <Tags size={16} />, label: "Categories", to: "/categories" },
+  ];
+
   return (
     <>
       {/* Overlay (mobile) */}
@@ -23,7 +34,9 @@ export default function Sidebar({ open, onClose }: Props) {
       >
         {/* Header */}
         <div className="flex items-center justify-between px-4 py-4 border-b dark:border-gray-800">
-          <span className="font-semibold">Workspace</span>
+          <span className="font-semibold text-gray-800 dark:text-gray-100">
+            Workspace
+          </span>
           <button onClick={onClose} className="md:hidden">
             <X size={18} />
           </button>
@@ -31,20 +44,25 @@ export default function Sidebar({ open, onClose }: Props) {
 
         {/* Menu */}
         <nav className="p-3 space-y-1 text-sm">
-          <MenuItem icon={<LayoutDashboard size={16} />} label="Dashboard" />
-          <MenuItem icon={<ListTodo size={16} />} label="Tasks" />
-          <MenuItem icon={<Tags size={16} />} label="Categories" />
+          {menuItems.map((item) => (
+            <NavLink
+              key={item.to}
+              to={item.to}
+              className={({ isActive }) =>
+                `flex items-center gap-3 px-3 py-2 rounded transition font-medium ${
+                  isActive
+                    ? "bg-blue-500 text-white dark:bg-blue-600"
+                    : "text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800"
+                }`
+              }
+              onClick={onClose} // close sidebar on mobile
+            >
+              {item.icon}
+              <span>{item.label}</span>
+            </NavLink>
+          ))}
         </nav>
       </aside>
     </>
-  );
-}
-
-function MenuItem({ icon, label }: any) {
-  return (
-    <div className="flex items-center gap-3 px-3 py-2 rounded cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800">
-      {icon}
-      <span>{label}</span>
-    </div>
   );
 }
